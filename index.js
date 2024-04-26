@@ -25,7 +25,20 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
 
+    const craftItemCollection = client.db('carftItemDB').collection('craftItems')
 
+    app.get('/craftItems', async (req, res)=>{
+        const cursor = craftItemCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+
+    app.post('/craftItems', async (req, res)=>{
+        const newCraftItem = req.body;
+        const result = await craftItemCollection.insertOne(newCraftItem);
+        res.send(result)
+        console.log(newCraftItem)
+    })
 
 
     // Connect the client to the server	(optional starting in v4.7)
