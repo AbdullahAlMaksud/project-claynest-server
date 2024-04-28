@@ -41,12 +41,35 @@ async function run() {
       res.send(result)
     })
 
+    app.put('/craftItems/:id', async (req,res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const option = {upsert:true};
+      const updateData = req.body;
+      const item = {
+        $set: {
+          product_name: updateData.product_name,
+          short_description: updateData.short_description,
+          subcaregory_Name: updateData.subcaregory_Name,
+          customization: updateData.customization,
+          processing_time: updateData.processing_time,
+          stockStatus: updateData.stockStatus,
+          price: updateData.price,
+          rating: updateData.rating,
+          user_name: updateData.user_name,
+          user_email: updateData.user_email,
+          imageURL: updateData.imageURL
+        }
+      }
+
+      const result = await craftItemCollection.updateOne(filter, item, option);
+      res.send(result);
+    })
+
     app.get('/craftItemsByEmail/:email', async (req, res) => {
       console.log(req.params.email)
       const result = await craftItemCollection.find({user_email : req.params.email}).toArray();
       res.send(result)
-
-
     })
 
     app.post('/craftItems', async (req, res) => {
