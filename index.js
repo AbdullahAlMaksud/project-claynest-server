@@ -66,6 +66,13 @@ async function run() {
       res.send(result);
     })
 
+    app.delete('/craftItems/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await craftItemCollection.deleteOne(query);
+      res.send(result)
+    })
+
     app.get('/craftItemsByEmail/:email', async (req, res) => {
       console.log(req.params.email)
       const result = await craftItemCollection.find({user_email : req.params.email}).toArray();
