@@ -1,16 +1,17 @@
 const express = require('express')
-const app = express()
 const cors = require('cors');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 require('dotenv').config()
+const app = express()
 const port = process.env.PORT || 5000;
 
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 console.log(port)
 
 //------------------------------
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.PASS_DB}@cluster0.1fo0aid.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
   serverApi: {
@@ -40,12 +41,13 @@ async function run() {
       res.send(result)
     })
 
-    // app.get('/craftItems/:email', async (req, res) => {
-    //   const email = req.params.email;
-    //   const query = { user_email: new ObjectId(email) }
-    //   const cursor = await craftItemCollection.find(query).toArray()
-    //   res.send(cursor)
-    // })
+    app.get('/craftItemsByEmail/:email', async (req, res) => {
+      console.log(req.params.email)
+      const result = await craftItemCollection.find({user_email : req.params.email}).toArray();
+      res.send(result)
+
+
+    })
 
     app.post('/craftItems', async (req, res) => {
       const newCraftItem = req.body;
