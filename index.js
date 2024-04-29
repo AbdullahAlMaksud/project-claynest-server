@@ -1,7 +1,6 @@
 const express = require('express')
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 5000;
@@ -11,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 console.log(port)
 
-//------------------------------
+//------------------------------MongoDB URi String
 const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.PASS_DB}@cluster0.1fo0aid.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
   serverApi: {
@@ -113,7 +112,7 @@ async function run() {
 }
 run().catch(console.dir);
 
-//--------------------
+//---------------Server Test
 
 app.get('/', (req, res) => {
   res.send('ClayNest Server is Running....')
