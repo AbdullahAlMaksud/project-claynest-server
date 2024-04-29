@@ -27,6 +27,7 @@ async function run() {
   try {
 
     const craftItemCollection = client.db('carftItemDB').collection('craftItems')
+    const craftCategory = client.db('carftItemDB').collection('craftCategory')
 
     app.get('/craftItems', async (req, res) => {
       const cursor = craftItemCollection.find()
@@ -41,10 +42,10 @@ async function run() {
       res.send(result)
     })
 
-    app.put('/craftItems/:id', async (req,res)=>{
+    app.put('/craftItems/:id', async (req, res) => {
       const id = req.params.id;
-      const filter = {_id: new ObjectId(id)}
-      const option = {upsert:true};
+      const filter = { _id: new ObjectId(id) }
+      const option = { upsert: true };
       const updateData = req.body;
       const item = {
         $set: {
@@ -66,24 +67,37 @@ async function run() {
       res.send(result);
     })
 
-    app.delete('/craftItems/:id', async(req,res)=>{
+    app.delete('/craftItems/:id', async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await craftItemCollection.deleteOne(query);
       res.send(result)
     })
 
     app.get('/craftItemsByEmail/:email', async (req, res) => {
       console.log(req.params.email)
-      const result = await craftItemCollection.find({user_email : req.params.email}).toArray();
+      const result = await craftItemCollection.find({ user_email: req.params.email }).toArray();
       res.send(result)
     })
+
+    app.get('/productsCategory/:category', async (req, res) => {
+      console.log(req.params.category)
+      const result = await craftItemCollection.find({ subcategory_Name : req.params.category }).toArray();
+      res.send(result)
+    })
+
 
     app.post('/craftItems', async (req, res) => {
       const newCraftItem = req.body;
       const result = await craftItemCollection.insertOne(newCraftItem);
       res.send(result)
       console.log(newCraftItem)
+    })
+
+    app.get('/craftCategory', async (req, res) => {
+      const cursor = craftCategory.find()
+      const result = await cursor.toArray()
+      res.send(result)
     })
 
 
